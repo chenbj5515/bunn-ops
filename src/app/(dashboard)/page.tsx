@@ -3,19 +3,13 @@ export default function DashboardPage() {
     <div className="p-6">
       <h1 className="text-2xl font-semibold">Ops Observatory</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        左侧可进入 tableman 全库 CRUD，以及构建历史、部署日志和应用日志模块。
+        左侧可进入 tableman 全库 CRUD，以及部署日志和应用日志模块。
       </p>
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border p-4">
           <p className="text-sm font-medium">Tableman CRUD</p>
           <p className="mt-1 text-xs text-muted-foreground">
             浏览 public schema 表、筛选、分页、主键批量删除。
-          </p>
-        </div>
-        <div className="rounded-lg border p-4">
-          <p className="text-sm font-medium">Build History</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            从 GitHub Actions 拉取 workflow runs 和状态。
           </p>
         </div>
         <div className="rounded-lg border p-4">

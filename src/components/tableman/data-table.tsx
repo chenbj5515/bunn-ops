@@ -166,25 +166,28 @@ export function DataTable({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex items-center justify-between border-b p-3">
-        <div className="text-sm text-muted-foreground">
+      <div className="flex min-h-14 items-center justify-between gap-3 border-b px-3 py-2">
+        <div className="text-sm text-muted-foreground whitespace-nowrap">
           共 {total} 行
           {total > 0 && `，显示第 ${startRow}-${endRow} 行`}
           {selectedIds.size > 0 && (
             <span className="ml-2 text-foreground">已选择 {selectedIds.size} 行</span>
           )}
         </div>
-        {hasPrimaryKey && selectedIds.size > 0 && (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            <Trash2 className="size-4" />
-            {isDeleting ? "删除中..." : `删除 (${selectedIds.size})`}
-          </Button>
-        )}
+        <div className="flex min-w-[120px] justify-end">
+          {hasPrimaryKey && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={selectedIds.size === 0 || isDeleting}
+              className={selectedIds.size === 0 ? "invisible pointer-events-none" : ""}
+            >
+              <Trash2 className="size-4" />
+              {isDeleting ? "删除中..." : `删除 (${selectedIds.size})`}
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="flex-1 overflow-auto">
@@ -203,7 +206,7 @@ export function DataTable({
               {columns.map((column) => (
                 <TableHead
                   key={column.name}
-                  className="sticky top-0 z-10 bg-background text-foreground"
+                  className="sticky top-0 z-10 w-[200px] min-w-[200px] max-w-[200px] bg-background text-foreground"
                 >
                   <div className="flex items-center gap-1 truncate">
                     <span
@@ -260,7 +263,7 @@ export function DataTable({
                         <TableCell
                           key={column.name}
                           title={formatted}
-                          className="cursor-pointer transition-colors hover:bg-muted/50"
+                          className="w-[200px] min-w-[200px] max-w-[200px] cursor-pointer truncate transition-colors hover:bg-muted/50"
                           onClick={() => copyToClipboard(formatted)}
                         >
                           <span

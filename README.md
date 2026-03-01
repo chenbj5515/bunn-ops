@@ -2,7 +2,6 @@
 
 独立后台项目，包含：
 - tableman 全库 CRUD（表浏览、筛选、分页、主键批量删除）
-- 构建历史（GitHub Actions）
 - 部署日志（从 workflow 记录聚合）
 - 应用日志（数据库日志表 + Redis 可用性 + SSH 拉取 VPS docker logs）
 
@@ -41,7 +40,7 @@ http://localhost:3000
 
 ## 主要目录
 
-- `src/app/(dashboard)`：后台页面（overview / builds / deployments / logs / tables）
+- `src/app/(dashboard)`：后台页面（overview / deployments / logs / tables）
 - `src/app/api/tables`：tableman API
 - `src/app/api/ops`：运维数据 API
 - `src/components/tableman`：tableman UI 组件

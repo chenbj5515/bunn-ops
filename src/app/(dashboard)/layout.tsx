@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { Sidebar } from "@/components/tableman/sidebar";
+import {
+  getTableAccessCounts,
+  getTableAccessEventName,
+  sortTablesByAccessFrequency,
+  type TableAccessCounts,
+} from "@/lib/table-access-counts";
 
 export default function DashboardLayout({
   children,
@@ -11,6 +17,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [tables, setTables] = useState<string[]>([]);
+  const [tableAccessCounts, setTableAccessCounts] = useState<TableAccessCounts>({});
   const [isLoadingTables, setIsLoadingTables] = useState(true);
   const pathname = usePathname();
 
@@ -18,6 +25,23 @@ export default function DashboardLayout({
     pathname?.startsWith("/tables/") && pathname !== "/tables"
       ? decodeURIComponent(pathname.replace(/^\/tables\//, "").split("/")[0] ?? "")
       : null;
+
+  useEffect(() => {
+    setTableAccessCounts(getTableAccessCounts());
+    const eventName = getTableAccessEventName();
+    const handleAccessUpdated = (event: Event) => {
+      const customEvent = event as CustomEvent<TableAccessCounts>;
+      if (customEvent.detail && typeof customEvent.detail === "object") {
+        setTableAccessCounts(customEvent.detail);
+        return;
+      }
+      setTableAccessCounts(getTableAccessCounts());
+    };
+    window.addEventListener(eventName, handleAccessUpdated as EventListener);
+    return () => {
+      window.removeEventListener(eventName, handleAccessUpdated as EventListener);
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchTables() {
@@ -39,14 +63,16 @@ export default function DashboardLayout({
     fetchTables();
   }, []);
 
+  const sortedTables = sortTablesByAccessFrequency(tables, tableAccessCounts);
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-dvh overflow-hidden">
       <Sidebar
-        tables={tables}
+        tables={sortedTables}
         selectedTable={selectedTable}
         isLoading={isLoadingTables}
       />
-      <main className="flex min-w-0 flex-1 flex-col">{children}</main>
+      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">{children}</main>
     </div>
   );
 }

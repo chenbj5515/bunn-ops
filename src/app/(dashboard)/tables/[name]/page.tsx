@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { DataTable } from "@/components/tableman/data-table";
 import { FilterBar } from "@/components/tableman/filter-bar";
+import { incrementTableAccessCount } from "@/lib/table-access-counts";
 import type { TableDataResponse } from "@/components/tableman/types";
 
 const PAGE_SIZE = 50;
@@ -43,6 +44,7 @@ export default function TablePage({
         }
         const data = (await response.json()) as TableDataResponse;
         setTableData(data);
+        incrementTableAccessCount(tableName);
       } catch (fetchError) {
         setError(fetchError instanceof Error ? fetchError.message : "获取表数据失败");
       } finally {
@@ -66,6 +68,7 @@ export default function TablePage({
       }
       const result = (await response.json()) as { deleted: number };
       toast.success(`成功删除 ${result.deleted} 行数据`);
+      incrementTableAccessCount(tableName);
 
       setRefreshKey((prev) => prev + 1);
     } catch (deleteError) {
@@ -74,7 +77,7 @@ export default function TablePage({
   }
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       {error && (
         <div className="border-b bg-destructive/10 p-3 text-destructive">{error}</div>
       )}

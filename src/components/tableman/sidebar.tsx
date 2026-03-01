@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Database, FileText, Hammer, ListTree, Table2 } from "lucide-react";
+import { Database, FileText, ListTree, Table2 } from "lucide-react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -15,7 +15,6 @@ interface SidebarProps {
 
 const CORE_NAV = [
   { href: "/", label: "Overview", icon: ListTree },
-  { href: "/builds", label: "Builds", icon: Hammer },
   { href: "/deployments", label: "Deployments", icon: FileText },
   { href: "/logs", label: "Logs", icon: FileText },
 ] as const;
@@ -25,7 +24,7 @@ export function Sidebar({ tables, selectedTable, isLoading }: SidebarProps) {
   const basePath = "/tables";
 
   return (
-    <div className="flex h-full w-72 flex-col border-r bg-muted/30">
+    <div className="flex h-full min-h-0 w-72 flex-col overflow-hidden border-r bg-muted/30">
       <div className="border-b p-4">
         <Link
           href="/"
@@ -61,7 +60,7 @@ export function Sidebar({ tables, selectedTable, isLoading }: SidebarProps) {
       <div className="border-b p-3 text-xs text-muted-foreground">
         Tableman (CRUD)
       </div>
-      <ScrollArea className="flex-1">
+      <ScrollArea className="min-h-0 flex-1">
         <div className="p-2">
           {isLoading ? (
             <div className="p-4 text-center text-sm text-muted-foreground">
