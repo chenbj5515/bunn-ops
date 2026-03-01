@@ -1,0 +1,11 @@
+services:
+  bunn-ops:
+    container_name: bunn-ops
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${PORT:-3000}:3000"
